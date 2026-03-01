@@ -1,0 +1,14 @@
+export interface TmdbMovie {
+  id: number;
+  title: string;
+  overview: string;
+  release_date: string;
+  poster_path: string;
+}
+
+export interface TmdbSearchResponse {
+  page: number;
+  results: TmdbMovie[];
+  total_pages: number;
+  total_results: number;
+}
