@@ -7,8 +7,6 @@ export class GenresController {
 
   @Get()
   async getGenres() {
-    const res = await this.genresService.getGenres();
-
-    return res;
+    return this.genresService.getGenres();;
   }
 }

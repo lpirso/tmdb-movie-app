@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom, catchError } from 'rxjs';
-import { TmdbSearchResponse, TmdbGenresResponse } from './tmdb-response.interface';
+import { TmdbMoviesResponse, TmdbGenresResponse, TmdbLanguage } from './tmdb-response.interface';
 
 @Injectable()
 export class TmdbService {
@@ -18,11 +18,11 @@ export class TmdbService {
     this.readAccessToken = this.configService.get<string>('TMDB_READ_ACCESS_TOKEN');
   }
 
-  async searchMoviesByTitle(query: string): Promise<TmdbSearchResponse> {
+  async searchMoviesByTitle(query: string): Promise<TmdbMoviesResponse> {
     const url = `${this.baseUrl}/search/movie`;
     
     const { data } = await firstValueFrom(
-      this.httpService.get<TmdbSearchResponse>(url, {
+      this.httpService.get<TmdbMoviesResponse>(url, {
         params: {
           query,
           include_adult: false,
@@ -44,11 +44,11 @@ export class TmdbService {
     return data;
   }
 
-  async discoverMovies(genreId: number | undefined): Promise<TmdbSearchResponse> {
+  async discoverMovies(genreId: number | undefined): Promise<TmdbMoviesResponse> {
     const url = `${this.baseUrl}/discover/movie`;
 
     const { data } = await firstValueFrom(
-      this.httpService.get<TmdbSearchResponse>(url, {
+      this.httpService.get<TmdbMoviesResponse>(url, {
         params: {
           with_genres: genreId || '',
           include_adult: false,
@@ -79,6 +79,26 @@ export class TmdbService {
         params: {
           language: 'en-US',
         },
+        headers: {
+          Authorization: `Bearer ${this.readAccessToken}`,
+          Accept: 'application/json',
+        }
+      }).pipe(
+        catchError((error) => {
+          this.logger.error(`Failed to fetch movies from TMDB: ${error.message}`);
+          throw new InternalServerErrorException('External API error');
+        }),
+      ),
+    );
+
+    return data;
+  }
+
+  async getLanguages(): Promise<TmdbLanguage[]>{
+    const url = `${this.baseUrl}/configuration/languages`;
+
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbLanguage[]>(url, {
         headers: {
           Authorization: `Bearer ${this.readAccessToken}`,
           Accept: 'application/json',

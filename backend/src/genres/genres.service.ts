@@ -1,24 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { TmdbService } from '../tmdb/tmdb.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
+import { TmdbGenresResponse } from '../tmdb/tmdb-response.interface';
 
 @Injectable()
 export class GenresService {
-  constructor(private readonly tmdbService: TmdbService) {}
+  constructor(
+    private readonly tmdbService: TmdbService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async getGenres() {
+    const cacheKey = 'genres';
+    const cached = await this.cacheManager.get<TmdbGenresResponse>(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
     const tmdbResponse = await this.tmdbService.getGenres();
 
     if (!tmdbResponse.genres || tmdbResponse.genres.length === 0) {
       throw new NotFoundException(`Genres could not be fetched.`);
     }
 
-    const resp = tmdbResponse.genres.map((genre) => ({
-      id: genre.id,
-      name: genre.name,
-    }));
+    await this.cacheManager.set(cacheKey, tmdbResponse, 3600);
 
-      return resp;
+    return tmdbResponse;
   }
 }
-
-//<>

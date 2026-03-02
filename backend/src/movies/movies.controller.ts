@@ -11,17 +11,13 @@ export class MoviesController {
   async getMovies(
     @Query(new ValidationPipe({ transform: true })) query: GetMoviesDto,
   ) {
-    const res = await this.moviesService.getMovies(query?.genreId);
-
-    return res;
+    return this.moviesService.getMovies(query?.genreId);
   }
 
   @Get('search')
   async searchMovies(
     @Query(new ValidationPipe({ transform: true })) query: SearchMoviesDto,
   ) {
-    const res = await this.moviesService.searchMovies(query.title);
-
-    return res;
+    return this.moviesService.searchMovies(query.title);
   }
 }
