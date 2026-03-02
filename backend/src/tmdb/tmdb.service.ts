@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom, catchError } from 'rxjs';
-import { TmdbSearchResponse } from './tmdb-response.interface';
+import { TmdbSearchResponse, TmdbGenresResponse } from './tmdb-response.interface';
 
 @Injectable()
 export class TmdbService {
@@ -18,7 +18,7 @@ export class TmdbService {
     this.readAccessToken = this.configService.get<string>('TMDB_READ_ACCESS_TOKEN');
   }
 
-  async searchMovies(query: string): Promise<TmdbSearchResponse> {
+  async searchMoviesByTitle(query: string): Promise<TmdbSearchResponse> {
     const url = `${this.baseUrl}/search/movie`;
     
     const { data } = await firstValueFrom(
@@ -30,7 +30,57 @@ export class TmdbService {
           page: 1,
         },
         headers: {
-          Authorization: `Bearer ${this.readAccessToken}`, // TMDB Read Access Token
+          Authorization: `Bearer ${this.readAccessToken}`,
+          Accept: 'application/json',
+        }
+      }).pipe(
+        catchError((error) => {
+          this.logger.error(`Failed to fetch movies from TMDB: ${error.message}`);
+          throw new InternalServerErrorException('External API error');
+        }),
+      ),
+    );
+
+    return data;
+  }
+
+  async discoverMovies(genreId: number | undefined): Promise<TmdbSearchResponse> {
+    const url = `${this.baseUrl}/discover/movie`;
+
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbSearchResponse>(url, {
+        params: {
+          with_genres: genreId || '',
+          include_adult: false,
+          language: 'en-US',
+          page: 1,
+          sort_by: 'vote_count.desc'
+        },
+        headers: {
+          Authorization: `Bearer ${this.readAccessToken}`,
+          Accept: 'application/json',
+        }
+      }).pipe(
+        catchError((error) => {
+          this.logger.error(`Failed to fetch movies from TMDB: ${error.message}`);
+          throw new InternalServerErrorException('External API error');
+        }),
+      ),
+    );
+
+    return data;
+  }
+
+  async getGenres(): Promise<TmdbGenresResponse>{
+    const url = `${this.baseUrl}/genre/movie/list`;
+
+    const { data } = await firstValueFrom(
+      this.httpService.get<TmdbGenresResponse>(url, {
+        params: {
+          language: 'en-US',
+        },
+        headers: {
+          Authorization: `Bearer ${this.readAccessToken}`,
           Accept: 'application/json',
         }
       }).pipe(

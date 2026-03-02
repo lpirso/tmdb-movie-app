@@ -6,7 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/search': {
+      '/movies': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false
+      },
+      '/genres': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false
