@@ -1,60 +1,63 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export type Movie = {
-  id: number | string;
-  title: string;
+    id: number;
+    title: string;
+    description: string;
+    posterUrl: string | undefined;
+    releaseYear: string;
+    genres: Genre[];
+    language: string | undefined;
 };
 
 export type Genre = {
-  id: number;
-  name: string;
+    id: number;
+    name: string;
 };
 
 export type GetMoviesParams = {
-  genreId?: number;
-  page?: number;
+    genreId?: number;
 };
 
-export type MoviesResponse = {
-  items: Movie[];
-  page?: number;
-  totalPages?: number;
-};
+export type MoviesResponse = Movie[];
 
 export type GenresResponse = {
-  items: Genre[];
+    genres: Genre[];
 };
 
 export const tmdbApi = createApi({
-  reducerPath: 'tmdbApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: '',
-  }),
-  endpoints: (builder) => ({
-    getMovies: builder.query<MoviesResponse, GetMoviesParams | undefined>({
-      query: (params) => ({
-        url: '/movies',
-        params: params ?? undefined,
-      }),
+    reducerPath: "tmdbApi",
+    baseQuery: fetchBaseQuery({
+        baseUrl: "",
     }),
+    endpoints: (builder) => ({
+        getMovies: builder.query<MoviesResponse, GetMoviesParams | undefined>({
+            query: (params) => ({
+                url: "/movies",
+                params: params ?? undefined,
+            }),
+        }),
 
-    searchMoviesByTitle: builder.query<MoviesResponse, { title: string; page?: number }>({
-      query: ({ title, page }) => ({
-        url: '/movies/search',
-        params: { title, page },
-      }),
-    }),
+        searchMoviesByTitle: builder.query<
+            MoviesResponse,
+            { title: string }
+        >({
+            query: ({ title }) => ({
+                url: "/movies/search",
+                params: { title },
+            }),
+        }),
 
-    getGenres: builder.query<GenresResponse, void>({
-      query: () => ({
-        url: '/genres',
-      }),
+        getGenres: builder.query<GenresResponse, void>({
+            query: () => ({
+                url: "/genres",
+            }),
+        }),
     }),
-  }),
 });
 
 export const {
-  useGetMoviesQuery,
-  useSearchMoviesByTitleQuery,
-  useGetGenresQuery,
+    useGetMoviesQuery,
+    useSearchMoviesByTitleQuery,
+    useGetGenresQuery,
 } = tmdbApi;

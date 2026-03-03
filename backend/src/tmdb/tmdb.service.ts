@@ -85,7 +85,7 @@ export class TmdbService {
         }
       }).pipe(
         catchError((error) => {
-          this.logger.error(`Failed to fetch movies from TMDB: ${error.message}`);
+          this.logger.error(`Failed to fetch genres from TMDB: ${error.message}`);
           throw new InternalServerErrorException('External API error');
         }),
       ),
@@ -105,7 +105,7 @@ export class TmdbService {
         }
       }).pipe(
         catchError((error) => {
-          this.logger.error(`Failed to fetch movies from TMDB: ${error.message}`);
+          this.logger.error(`Failed to fetch languages from TMDB: ${error.message}`);
           throw new InternalServerErrorException('External API error');
         }),
       ),

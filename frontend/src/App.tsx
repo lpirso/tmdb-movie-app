@@ -1,22 +1,17 @@
-import './App.css';
-import { useSearchMoviesByTitleQuery, useGetGenresQuery, useGetMoviesQuery } from './store/tmdbApi';
+import { MoviesGrid } from "./MoviesGrid/MoviesGrid";
+import { GenreSelect } from "./header/GenreSelect";
+import { SearchInput } from "./header/SearchInput";
 
 function App() {
-
-  const searchByTitle = useSearchMoviesByTitleQuery({title: 'lord'});
-  const genres = useGetGenresQuery();
-  const topVoted = useGetMoviesQuery(undefined);
-  const topVotedInSpecificGenre = useGetMoviesQuery({genreId: 14})
-
-  console.log("bytitle: ",searchByTitle.data);
-  console.log("genres: ",genres.data);
-  console.log("topVoted: ", topVoted.data);
-  console.log("top voted genre thing: ", topVotedInSpecificGenre.data);
-
-  return (
-    <>
-    </>
-  )
+    return (
+        <>
+            <header>
+                <SearchInput />
+                <GenreSelect />
+            </header>
+            <MoviesGrid />
+        </>
+    );
 }
 
-export default App
+export default App;

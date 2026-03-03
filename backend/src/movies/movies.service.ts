@@ -11,9 +11,8 @@ import {
 export interface Movie {
   id: number;
   title: string;
-  overview: string;
+  description: string;
   posterUrl: string | null;
-  backdropUrl: string | null;
   releaseYear: string;
   genres: TmdbGenre[];
   language: string | undefined;
@@ -47,11 +46,8 @@ export class MoviesService {
       return {
         id: movie.id,
         title: movie.title,
-        overview: movie.overview,
+        description: movie.overview,
         posterUrl: movie.poster_path
-          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-          : null,
-        backdropUrl: movie.backdrop_path
           ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
           : null,
         releaseYear: movie.release_date
