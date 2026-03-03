@@ -1,6 +1,6 @@
-import { MoviesGrid } from "./moviesGrid/MoviesGrid";
-import { Header } from "./header/Header";
-import { RecentSearchesSidebar } from "./recentSearchesSidebar/RecentSearchesSidebar";
+import { MoviesGrid } from "./components/moviesGrid/MoviesGrid";
+import { Header } from "./components/header/Header";
+import { RecentSearches } from "./components/recentSearches/RecentSearches";
 import { useRecentSearchesHistory } from "./hooks/useRecentSearchesHistory";
 
 export const App = () => {
@@ -12,7 +12,7 @@ export const App = () => {
     return (
         <>
             <Header addRecentSearchText={addRecentSearchText} />
-            <RecentSearchesSidebar
+            <RecentSearches
                 addRecentSearchText={addRecentSearchText}
                 recentSearchHistory={recentSearchHistory}
             />

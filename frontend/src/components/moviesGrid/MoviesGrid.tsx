@@ -1,10 +1,12 @@
-import { MovieCard } from "./MovieCard";
-import { useAppSelector } from "../store/hooks";
+import { MovieCard } from "./movieCard/MovieCard";
+import { useAppSelector } from "../../store/hooks";
 import {
     useGetMoviesQuery,
     useSearchMoviesByTitleQuery,
     useGetGenresQuery,
-} from "../store/tmdbApi";
+} from "../../store/tmdbApi";
+import { Heading1 } from "../shared.styles";
+import { MovieGridWrapper } from "./MovieGrid.styles";
 
 export const MoviesGrid = () => {
     const { genreId, searchText } = useAppSelector((state) => state.filters);
@@ -22,13 +24,16 @@ export const MoviesGrid = () => {
 
     const activeQueryResponse = searchText ? searchResult : moviesResult;
 
-    const { data, isLoading, isFetching, isError, error } = activeQueryResponse;
+    const { data, isLoading, error } = activeQueryResponse;
 
     const { data: genresData } = useGetGenresQuery();
 
     const selectedGenreName = () => {
         if (!genreId || !genresData) return null;
-        return genresData.genres.find((genre) => genre.id === genreId)?.name ?? null;
+        return (
+            genresData.genres.find((genre) => genre.id === genreId)?.name ??
+            null
+        );
     };
 
     if (isLoading) {
@@ -51,12 +56,14 @@ export const MoviesGrid = () => {
     }
 
     return (
-        <section>
-            <h1>{mainHeading}</h1>
-            {movies.map((movie) => {
-                return <MovieCard key={movie.id} movie={movie} />;
-            })}
-        </section>
+        <>
+            <Heading1>{mainHeading}</Heading1>
+            <MovieGridWrapper>
+                {movies.map((movie) => {
+                    return <MovieCard key={movie.id} movie={movie} />;
+                })}
+            </MovieGridWrapper>
+        </>
     );
 };
 

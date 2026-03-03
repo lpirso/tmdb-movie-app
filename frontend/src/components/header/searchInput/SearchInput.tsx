@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setSearchTextAndClearGenre, clearSearch } from "../store/filtersSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+    setSearchTextAndClearGenre,
+    clearSearch,
+} from "../../../store/filtersSlice";
+import { SearchField, CloseButton, SearchFieldWrapper } from "./SearchInput.styles";
 
 type SearchInputProps = {
     addRecentSearchText: (searchText: string) => void;
@@ -30,8 +34,8 @@ export const SearchInput = (props: SearchInputProps) => {
     };
 
     return (
-        <>
-            <input
+        <SearchFieldWrapper>
+            <SearchField
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Search movie by title…"
@@ -42,7 +46,9 @@ export const SearchInput = (props: SearchInputProps) => {
                 }}
             />
 
-            {searchText ? <button onClick={emptySearch}>Clear</button> : null}
-        </>
+            {searchText && (
+                <CloseButton onClick={emptySearch}>Clear</CloseButton>
+            )}
+        </SearchFieldWrapper>
     );
 };
