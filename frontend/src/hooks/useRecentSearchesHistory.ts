@@ -4,7 +4,7 @@ import {
   saveRecentSearches,
 } from "../utils/recentSearches";
 
-export function useRecentSearchesHistory() {
+export const useRecentSearchesHistory = () => {
   const [recentSearchHistory, setRecentSearchHistory] = useState<string[]>(
     getRecentSearchesFromLocalStorage(),
   );
@@ -15,4 +15,4 @@ export function useRecentSearchesHistory() {
   };
 
   return { recentSearchHistory, addRecentSearchText };
-}
+};

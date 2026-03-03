@@ -8,7 +8,7 @@ export const MovieCardWrapper = styled.article`
 
 export const Poster = styled.img`
   border-radius: 10px 10px 0 0;
-  max-width: 100%;
+  width: 100%;
 `;
 
 export const MovieAttributesWrapper = styled.div`

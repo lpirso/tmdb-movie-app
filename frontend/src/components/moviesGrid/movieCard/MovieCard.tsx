@@ -1,13 +1,13 @@
 import type { Movie } from "../../../store/tmdbApi";
 import { setGenreIdAndClearSearch } from "../../../store/filtersSlice";
 import { useAppDispatch } from "../../../store/hooks";
+import { Button, Paragraph, Heading2, Heading3 } from "../../shared.styles";
 import {
   MovieCardWrapper,
   Poster,
   MovieAttributesWrapper,
   GenresWrapper,
 } from "./Moviecard.styles";
-import { Button, Paragraph, Heading2, Heading3 } from "../../shared.styles";
 
 type MovieCardProps = {
   movie: Movie;

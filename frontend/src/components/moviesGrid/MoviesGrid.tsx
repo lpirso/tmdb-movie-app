@@ -28,7 +28,7 @@ export const MoviesGrid = () => {
 
   const { data: genresData } = useGetGenresQuery();
 
-  const selectedGenreName = () => {
+  const getSelectedGenreName = () => {
     if (!genreId || !genresData) return null;
     return genresData.genres.find((genre) => genre.id === genreId)?.name ?? null;
   };
@@ -45,8 +45,8 @@ export const MoviesGrid = () => {
   const movies = data ?? [];
   let mainHeading;
 
-  if (selectedGenreName()) {
-    mainHeading = `Top Voted Movies in ${selectedGenreName()}`;
+  if (getSelectedGenreName()) {
+    mainHeading = `Top Voted Movies in ${getSelectedGenreName()}`;
   } else if (searchText) {
     mainHeading = `Search results for: "${searchText}"`;
   } else {
