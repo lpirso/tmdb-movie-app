@@ -28,7 +28,7 @@ export type GenresResponse = {
 export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "",
+    baseUrl: import.meta.env.VITE_API_BASE_URL,
   }),
   endpoints: (builder) => ({
     getMovies: builder.query<MoviesResponse, GetMoviesParams | undefined>({
