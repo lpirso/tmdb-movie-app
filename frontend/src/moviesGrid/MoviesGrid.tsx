@@ -28,7 +28,7 @@ export const MoviesGrid = () => {
 
     const selectedGenreName = () => {
         if (!genreId || !genresData) return null;
-        return genresData.genres.find((g) => g.id === genreId)?.name ?? null;
+        return genresData.genres.find((genre) => genre.id === genreId)?.name ?? null;
     };
 
     if (isLoading) {

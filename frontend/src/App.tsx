@@ -1,17 +1,24 @@
-import { MoviesGrid } from "./MoviesGrid/MoviesGrid";
-import { GenreSelect } from "./header/GenreSelect";
-import { SearchInput } from "./header/SearchInput";
+import { MoviesGrid } from "./moviesGrid/MoviesGrid";
+import { Header } from "./header/Header";
+import { RecentSearchesSidebar } from "./recentSearchesSidebar/RecentSearchesSidebar";
+import { useRecentSearchesHistory } from "./hooks/useRecentSearchesHistory";
 
-function App() {
+export const App = () => {
+    const {
+        recentSearchHistory,
+        addRecentSearchText,
+    } = useRecentSearchesHistory();
+
     return (
         <>
-            <header>
-                <SearchInput />
-                <GenreSelect />
-            </header>
+            <Header addRecentSearchText={addRecentSearchText} />
+            <RecentSearchesSidebar
+                addRecentSearchText={addRecentSearchText}
+                recentSearchHistory={recentSearchHistory}
+            />
             <MoviesGrid />
         </>
     );
-}
+};
 
 export default App;

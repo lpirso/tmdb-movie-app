@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSearchTextAndClearGenre, clearSearch } from "../store/filtersSlice";
 
-export const SearchInput = () => {
+type SearchInputProps = {
+    addRecentSearchText: (searchText: string) => void;
+};
+
+export const SearchInput = (props: SearchInputProps) => {
+    const { addRecentSearchText } = props;
     const dispatch = useAppDispatch();
     const { searchText } = useAppSelector((state) => state.filters);
     const [userInput, setUserInput] = useState("");
@@ -15,14 +20,15 @@ export const SearchInput = () => {
         const trimmedUserInput = userInput.trim();
         if (!trimmedUserInput) return;
 
+        addRecentSearchText(trimmedUserInput);
         dispatch(setSearchTextAndClearGenre(trimmedUserInput));
     };
 
     const emptySearch = () => {
         dispatch(clearSearch());
         setUserInput("");
-    }
-    
+    };
+
     return (
         <>
             <input
@@ -36,9 +42,7 @@ export const SearchInput = () => {
                 }}
             />
 
-            {searchText ? (
-                <button onClick={emptySearch}>Clear</button>
-            ) : null}
+            {searchText ? <button onClick={emptySearch}>Clear</button> : null}
         </>
     );
 };
