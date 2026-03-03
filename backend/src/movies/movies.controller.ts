@@ -1,17 +1,17 @@
 import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { SearchMoviesDto } from './dto/search-movie.dto';
-import { GetMoviesDto } from './dto/get-movie.dto';
+import { FetchMoviesDto } from './dto/fetch-movies.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  async getMovies(
-    @Query(new ValidationPipe({ transform: true })) query: GetMoviesDto,
+  async fetchMovies(
+    @Query(new ValidationPipe({ transform: true })) query: FetchMoviesDto,
   ) {
-    return this.moviesService.getMovies(query?.genreId);
+    return this.moviesService.fetchMovies(query?.genreId);
   }
 
   @Get('search')

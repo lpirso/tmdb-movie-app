@@ -6,7 +6,7 @@ export class GenresController {
   constructor(private readonly genresService: GenresService) {}
 
   @Get()
-  async getGenres() {
-    return this.genresService.getGenres();;
+  async fetchGenres() {
+    return this.genresService.fetchGenres();
   }
 }

@@ -3,6 +3,7 @@ import { TmdbService } from '../tmdb/tmdb.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
 import { TmdbGenresResponse } from '../tmdb/tmdb-response.interface';
+import { CACHE_DURATION } from '../app.module';
 
 @Injectable()
 export class GenresService {
@@ -11,7 +12,7 @@ export class GenresService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async getGenres() {
+  async fetchGenres() {
     const cacheKey = 'genres';
     const cached = await this.cacheManager.get<TmdbGenresResponse>(cacheKey);
 
@@ -19,13 +20,13 @@ export class GenresService {
       return cached;
     }
 
-    const tmdbResponse = await this.tmdbService.getGenres();
+    const tmdbResponse = await this.tmdbService.fetchGenres();
 
     if (!tmdbResponse.genres || tmdbResponse.genres.length === 0) {
       throw new NotFoundException(`Genres could not be fetched.`);
     }
 
-    await this.cacheManager.set(cacheKey, tmdbResponse, 3600);
+    await this.cacheManager.set(cacheKey, tmdbResponse, CACHE_DURATION);
 
     return tmdbResponse;
   }

@@ -1,72 +1,66 @@
 import { MovieCard } from "./movieCard/MovieCard";
 import { useAppSelector } from "../../store/hooks";
 import {
-    useGetMoviesQuery,
-    useSearchMoviesByTitleQuery,
-    useGetGenresQuery,
+  useGetMoviesQuery,
+  useSearchMoviesByTitleQuery,
+  useGetGenresQuery,
 } from "../../store/tmdbApi";
-import { Heading1 } from "../shared.styles";
+import { Heading1, Heading3 } from "../shared.styles";
 import { MovieGridWrapper } from "./MovieGrid.styles";
 
 export const MoviesGrid = () => {
-    const { genreId, searchText } = useAppSelector((state) => state.filters);
+  const { genreId, searchText } = useAppSelector((state) => state.filters);
 
-    const searchResult = useSearchMoviesByTitleQuery(
-        { title: searchText },
-        {
-            skip: !searchText,
-        },
-    );
+  const searchResult = useSearchMoviesByTitleQuery(
+    { title: searchText },
+    {
+      skip: !searchText,
+    },
+  );
 
-    const moviesResult = useGetMoviesQuery(genreId ? { genreId } : undefined, {
-        skip: !!searchText,
-    });
+  const moviesResult = useGetMoviesQuery(genreId ? { genreId } : undefined, {
+    skip: !!searchText,
+  });
 
-    const activeQueryResponse = searchText ? searchResult : moviesResult;
+  const activeQueryResponse = searchText ? searchResult : moviesResult;
 
-    const { data, isLoading, error } = activeQueryResponse;
+  const { data, isLoading, error } = activeQueryResponse;
 
-    const { data: genresData } = useGetGenresQuery();
+  const { data: genresData } = useGetGenresQuery();
 
-    const selectedGenreName = () => {
-        if (!genreId || !genresData) return null;
-        return (
-            genresData.genres.find((genre) => genre.id === genreId)?.name ??
-            null
-        );
-    };
+  const selectedGenreName = () => {
+    if (!genreId || !genresData) return null;
+    return genresData.genres.find((genre) => genre.id === genreId)?.name ?? null;
+  };
 
-    if (isLoading) {
-    }
+  if (isLoading) {
+    return <Heading3>Imagine there is a pretty loading animation here...</Heading3>;
+  }
 
-    if (error) {
-        console.error(error);
-        return <p>Something went wrong!</p>;
-    }
+  if (error) {
+    console.error(error);
+    return <p>Something went wrong!</p>;
+  }
 
-    const movies = data ?? [];
-    let mainHeading;
+  const movies = data ?? [];
+  let mainHeading;
 
-    if (selectedGenreName()) {
-        mainHeading = `Top Voted Movies in ${selectedGenreName()}`;
-    } else if (searchText) {
-        mainHeading = `Search results for: "${searchText}"`;
-    } else {
-        mainHeading = "Top Voted Movies";
-    }
+  if (selectedGenreName()) {
+    mainHeading = `Top Voted Movies in ${selectedGenreName()}`;
+  } else if (searchText) {
+    mainHeading = `Search results for: "${searchText}"`;
+  } else {
+    mainHeading = "Top Voted Movies";
+  }
 
-    return (
-        <>
-            <Heading1>{mainHeading}</Heading1>
-            <MovieGridWrapper>
-                {movies.map((movie) => {
-                    return <MovieCard key={movie.id} movie={movie} />;
-                })}
-            </MovieGridWrapper>
-        </>
-    );
+  return (
+    <>
+      <Heading1>{mainHeading}</Heading1>
+      <MovieGridWrapper>
+        {movies.map((movie) => {
+          return <MovieCard key={movie.id} movie={movie} />;
+        })}
+      </MovieGridWrapper>
+    </>
+  );
 };
-
-// <>
-// ||
-// ``

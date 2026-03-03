@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { LanguagesService } from './languages.service';
 import { TmdbModule } from '../tmdb/tmdb.module';
@@ -8,5 +7,4 @@ import { TmdbModule } from '../tmdb/tmdb.module';
   controllers: [],
   providers: [LanguagesService],
 })
-
 export class LanguagesModule {}

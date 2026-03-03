@@ -17,11 +17,11 @@ const theme = {
 };
 
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <Provider store={store}>
-            <ThemeProvider theme={theme}>
-                <App />
-            </ThemeProvider>
-        </Provider>
-    </StrictMode>,
+  <StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </StrictMode>,
 );

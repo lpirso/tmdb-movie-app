@@ -1,54 +1,49 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-    setSearchTextAndClearGenre,
-    clearSearch,
-} from "../../../store/filtersSlice";
+import { setSearchTextAndClearGenre, clearSearch } from "../../../store/filtersSlice";
 import { SearchField, CloseButton, SearchFieldWrapper } from "./SearchInput.styles";
 
 type SearchInputProps = {
-    addRecentSearchText: (searchText: string) => void;
+  addRecentSearchText: (searchText: string) => void;
 };
 
 export const SearchInput = (props: SearchInputProps) => {
-    const { addRecentSearchText } = props;
-    const dispatch = useAppDispatch();
-    const { searchText } = useAppSelector((state) => state.filters);
-    const [userInput, setUserInput] = useState("");
+  const { addRecentSearchText } = props;
+  const dispatch = useAppDispatch();
+  const { searchText } = useAppSelector((state) => state.filters);
+  const [userInput, setUserInput] = useState("");
 
-    useEffect(() => {
-        setUserInput(searchText);
-    }, [searchText]);
+  useEffect(() => {
+    setUserInput(searchText);
+  }, [searchText]);
 
-    const submitSearch = () => {
-        const trimmedUserInput = userInput.trim();
-        if (!trimmedUserInput) return;
+  const submitSearch = () => {
+    const trimmedUserInput = userInput.trim();
+    if (!trimmedUserInput) return;
 
-        addRecentSearchText(trimmedUserInput);
-        dispatch(setSearchTextAndClearGenre(trimmedUserInput));
-    };
+    addRecentSearchText(trimmedUserInput);
+    dispatch(setSearchTextAndClearGenre(trimmedUserInput));
+  };
 
-    const emptySearch = () => {
-        dispatch(clearSearch());
-        setUserInput("");
-    };
+  const emptySearch = () => {
+    dispatch(clearSearch());
+    setUserInput("");
+  };
 
-    return (
-        <SearchFieldWrapper>
-            <SearchField
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Search movie by title…"
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        submitSearch();
-                    }
-                }}
-            />
+  return (
+    <SearchFieldWrapper>
+      <SearchField
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        placeholder="Search movie by title…"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            submitSearch();
+          }
+        }}
+      />
 
-            {searchText && (
-                <CloseButton onClick={emptySearch}>Clear</CloseButton>
-            )}
-        </SearchFieldWrapper>
-    );
+      {searchText && <CloseButton onClick={emptySearch}>Clear</CloseButton>}
+    </SearchFieldWrapper>
+  );
 };

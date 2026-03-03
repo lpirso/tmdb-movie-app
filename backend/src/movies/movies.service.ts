@@ -29,8 +29,8 @@ export class MoviesService {
   private async transformResponse(
     tmdbResponse: TmdbMoviesResponse,
   ): Promise<Movie[]> {
-    const { genres: allGenres } = await this.genresService.getGenres();
-    const allLanguages = await this.languagesService.getLanguages();
+    const { genres: allGenres } = await this.genresService.fetchGenres();
+    const allLanguages = await this.languagesService.fetchLanguages();
 
     const movies = tmdbResponse.results.map((movie) => {
       const genres = allGenres.filter((genre) => {
@@ -73,7 +73,7 @@ export class MoviesService {
     return this.transformResponse(tmdbResponse);
   }
 
-  async getMovies(genreId?: number) {
+  async fetchMovies(genreId?: number) {
     const tmdbResponse = await this.tmdbService.discoverMovies(genreId);
 
     if (!tmdbResponse.results || tmdbResponse.results.length === 0) {

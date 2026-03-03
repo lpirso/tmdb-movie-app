@@ -1,7 +1,7 @@
 import { IsInt, IsOptional, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class GetMoviesDto {
+export class FetchMoviesDto {
   @IsOptional()
   @Type(() => Number)
   @IsInt({ message: 'Genre ID must be an integer' })
