@@ -57,7 +57,7 @@ export const MoviesGrid = () => {
     <>
       <Heading1>{mainHeading}</Heading1>
       <MovieGridWrapper>
-        {movies.map((movie) => {
+        {movies?.map((movie) => {
           return <MovieCard key={movie.id} movie={movie} />;
         })}
       </MovieGridWrapper>

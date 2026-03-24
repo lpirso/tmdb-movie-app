@@ -30,7 +30,7 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
         <Heading3>{language}</Heading3>
         <Paragraph>{description}</Paragraph>
         <GenresWrapper>
-          {genres.map((genre) => {
+          {genres?.map((genre) => {
             return (
               <Button
                 onClick={() => {
